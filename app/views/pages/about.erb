@@ -1,1 +1,9 @@
-<h1>Our first view 🚀</h1>
+<% if user_signed_in? %>
+  <h1>Welcome <%= current_user.email %></h1>
+<% else %>
+  <h1>Welcome to our app</h1>
+<% end %>
+
+<%= link_to "Sign Up", new_user_registration_path, class: "button-main" %>
+Already a user?
+<%= link_to "Log In", new_user_session_path, class: "button-back" %>
