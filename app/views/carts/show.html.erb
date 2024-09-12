@@ -1,5 +1,7 @@
 <h1>Welcome to Cart for <%= current_user.first_name %> <%= current_user.last_name %></h1>
 
-<% @cart_products.each do |product| %>
-  <p><%= product.title %> - £<%= product.price %></p>
+<% @cart.cart_products.each do |cart_product| %>
+  <%= cart_product.product.title %> - <%= cart_product.product.price %>
+  <%= link_to 'Remove', cartproduct_path(cart_product), data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
+  <br>
 <% end %>

@@ -1,6 +1,8 @@
 <h1>Welcome to <%= @product.title %> Page</h1>
 
 <p>This <%= @product.title %> costs:  £<%= @product.price %></p>
+<%= console %>
+<p>Quantity: <%= @product.stock_quantity %> </p>
 
 <%= form_with url: cartproducts_path, method: :post do |f| %>
   <%= hidden_field_tag :product_id, @product.id %>
