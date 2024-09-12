@@ -1,6 +1,5 @@
 <h1>Welcome to Cart for <%= current_user.first_name %> <%= current_user.last_name %></h1>
 
-<% @cart.each do |product| %>
-  <p><%= product.name %></p>
-  <p>£<%= product.price %></p>
+<% @cart_products.each do |product| %>
+  <p><%= product.title %> - £<%= product.price %></p>
 <% end %>
