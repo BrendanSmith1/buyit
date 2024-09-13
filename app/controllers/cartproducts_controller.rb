@@ -27,14 +27,12 @@ class CartproductsController < ApplicationController
     @new_quantity = params[:cart_product][:quantity].to_i
     @product = Product.find(@cart_product.product_id)
 
-    # 1. If the user adds more to the cart, we need to check if there's enough stock
-    # If there's enough stock add the quant to the cart and reduce stock
-    # If there's not enough display an error message
-    # 2. If the user removes from the cart, we need to increase the stock
+    # If the new quantity is less than the previous quantity, increase the stock
     if @prev_quantity > @new_quantity && @new_quantity.positive?
       @cart_product.update(quantity: @new_quantity)
       @product.increase_stock!(@prev_quantity - @new_quantity)
     else
+    # If the new quantity is more than the previous quantity, decrease the stock
       if @product.enough_stock?(@new_quantity - @prev_quantity)
         @cart_product.update(quantity: @new_quantity)
         @product.decrease_stock!(@new_quantity - @prev_quantity)
@@ -42,21 +40,6 @@ class CartproductsController < ApplicationController
         flash[:alert] = "There's not enough stock for this product"
       end
     end
-
-
-    # # If the quantity is > 0, update the quantity, otherwise destroy the cart product
-    # @new_quantity.positive? ? @cart_product.update(quantity: params[:cart_product][:quantity]) : @cart_product.destroy
-
-    # # If the stock is not enough, update the cart product quantity to the stock quantity
-    # # The user can change the quant of stock!
-    # # Need a new attribute to store the original quantity of the product, which only gets changed when the user checks out
-    # if @product.enough_stock?(@new_quantity)
-    #   # If the quantity is increased (prev < new) reduce stock, if quantity is decreased (prev > new) increase stock
-    #   @new_quantity > @prev_quantity ? @product.decrease_stock!(@new_quantity - @prev_quantity) : @product.increase_stock!(@prev_quantity - @new_quantity)
-    # else
-    #   # If the stock is not enough, update the cart product quantity to the stock quantity
-    #   @cart_product.update(quantity: @product.stock_quantity)
-    # end
 
     redirect_to cart_path(@cart)
   end

@@ -8,4 +8,4 @@
   <%= f.submit 'Add to Cart', class: "btn btn-primary" %>
 <% end %>
 
-<%= link_to 'View Cart', cart_path, class: "btn btn-secondary" %>
+<%= link_to 'View Cart', cart_path(current_user.cart), class: "btn btn-secondary" %>
