@@ -12,20 +12,34 @@ class CartproductsController < ApplicationController
     @cart_product = @cart.cart_products.find_by(product_id: @product.id)
 
     # We want to add the product to the cart
-    # if @cart_product.present?
+    if @cart_product.present?
       # If the product already exists in the cart, increase the quantity
-      # @cart_product.update(quantity: (@cart_product.quantity + 1))
-    # else
+      @cart_product.update(quantity: (@cart_product.quantity + 1))
+    else
       # Otherwise, create a new cart product
       @cart_product = @cart.cart_products.create!(product: @product, quantity: 1)
-    # end
+    end
 
-    # If the cart is saved, we want to redirect the user to the cart show page
+    # If the cart is saved, redirect the user to the cart show page
     if @cart.save
       redirect_to cart_path(@cart)
     else
       redirect_to product_path(@product)
     end
+  end
+
+  def update
+    # Find the cart product and update the quantity
+    @cart = current_user.cart
+    @cart_product = @cart.cart_products.find(params[:id])
+
+    # If the quantity is > 0, update the quantity, otherwise destroy the cart product
+    if params[:cart_product][:quantity].to_i.positive?
+      @cart_product.update(quantity: params[:cart_product][:quantity])
+    else
+      @cart_product.destroy
+    end
+    redirect_to cart_path(@cart)
   end
 
   def destroy
