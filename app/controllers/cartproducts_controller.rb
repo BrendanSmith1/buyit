@@ -37,23 +37,24 @@ class CartproductsController < ApplicationController
     @cart_product = @cart.cart_products.find(params[:id])
     @prev_quantity = @cart_product.quantity
     @new_quantity = params[:cart_product][:quantity].to_i
-    @product = Product.find(params[:product_id])
+    @product = Product.find(@cart_product.product_id)
+    # debugger
 
     # If the quantity is > 0, update the quantity, otherwise destroy the cart product
-    if @new_quantity.positive?
+    if params[:cart_product][:quantity].to_i.positive?
       @cart_product.update(quantity: params[:cart_product][:quantity])
     else
       @cart_product.destroy
     end
 
     # If the quantity is increased (prev < new) reduce stock, if quantity is decreased (prev > new) increase stock
-    # if @prev_quantity < @new_quantity
-    #   @product.update(stock_quantity: (@product.stock_quantity - @prev_quantity + @new_quantity))
-    # elsif @prev_quantity > @new_quantity
-    #   @product.update(stock_quantity: (@product.stock_quantity - @prev_quantity + @new_quantity))
-    # else
-    #   # Do nothing
-    # end
+    if @prev_quantity < @new_quantity
+      @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
+    elsif @prev_quantity > @new_quantity
+      @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
+    else
+      # Do nothing
+    end
 
     redirect_to cart_path(@cart)
   end

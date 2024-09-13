@@ -3,7 +3,7 @@
 <% @cart.cart_products.each do |cart_product| %>
   <%= cart_product.product.title %> - £<%= cart_product.product.price %>
   <p>Quantity: <%= cart_product.quantity %></p>
-  <p>Remaining Quantity <%= cart_product.product.stock_quantity %></p>
+  <p>Stock: <%= cart_product.product.stock_quantity %></p>
   <!-- Form for updating quantity -->
   <%= form_with model: cart_product, url: cartproduct_path(cart_product), method: :patch do |f| %>
     <%= f.number_field :quantity, value: cart_product.quantity %>
