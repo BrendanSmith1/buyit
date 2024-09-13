@@ -48,12 +48,17 @@ class CartproductsController < ApplicationController
     end
 
     # If the quantity is increased (prev < new) reduce stock, if quantity is decreased (prev > new) increase stock
-    if @prev_quantity < @new_quantity
-      @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
-    elsif @prev_quantity > @new_quantity
-      @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
+    if @product.enough_stock?(@new_quantity)
+      if @prev_quantity < @new_quantity
+        @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
+      elsif @prev_quantity > @new_quantity
+        @product.update(stock_quantity: (@product.stock_quantity + @prev_quantity - @new_quantity))
+      else
+        # Do nothing
+      end
     else
-      # Do nothing
+      # If the stock is not enough, update the cart product quantity to the stock quantity
+      @cart_product.update(quantity: @product.stock_quantity)
     end
 
     redirect_to cart_path(@cart)
