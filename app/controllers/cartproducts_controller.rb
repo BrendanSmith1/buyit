@@ -20,6 +20,9 @@ class CartproductsController < ApplicationController
       @cart_product = @cart.cart_products.create!(product: @product, quantity: 1)
     end
 
+    # If the product is added to the cart, reduce the stock
+    @product.update(stock_quantity: (@product.stock_quantity - 1))
+
     # If the cart is saved, redirect the user to the cart show page
     if @cart.save
       redirect_to cart_path(@cart)
@@ -32,13 +35,26 @@ class CartproductsController < ApplicationController
     # Find the cart product and update the quantity
     @cart = current_user.cart
     @cart_product = @cart.cart_products.find(params[:id])
+    @prev_quantity = @cart_product.quantity
+    @new_quantity = params[:cart_product][:quantity].to_i
+    @product = Product.find(params[:product_id])
 
     # If the quantity is > 0, update the quantity, otherwise destroy the cart product
-    if params[:cart_product][:quantity].to_i.positive?
+    if @new_quantity.positive?
       @cart_product.update(quantity: params[:cart_product][:quantity])
     else
       @cart_product.destroy
     end
+
+    # If the quantity is increased (prev < new) reduce stock, if quantity is decreased (prev > new) increase stock
+    # if @prev_quantity < @new_quantity
+    #   @product.update(stock_quantity: (@product.stock_quantity - @prev_quantity + @new_quantity))
+    # elsif @prev_quantity > @new_quantity
+    #   @product.update(stock_quantity: (@product.stock_quantity - @prev_quantity + @new_quantity))
+    # else
+    #   # Do nothing
+    # end
+
     redirect_to cart_path(@cart)
   end
 
