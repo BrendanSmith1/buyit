@@ -1,16 +1,34 @@
 <h1>Welcome to Cart for <%= current_user.first_name %> <%= current_user.last_name %></h1>
 
-<% @cart.cart_products.each do |cart_product| %>
-  <%= cart_product.product.title %> - £<%= cart_product.product.price %>
-  <p>Quantity: <%= cart_product.quantity %></p>
-  <p>Stock: <%= cart_product.product.stock_quantity %></p>
-  <!-- Form for updating quantity -->
-  <%= form_with model: cart_product, url: cartproduct_path(cart_product), method: :patch do |f| %>
-    <%= f.number_field :quantity, value: cart_product.quantity %>
-    <%= f.submit 'Update', class: "btn btn-primary btn-sm" %>
-  <% end %>
-  <%= link_to 'Remove All', destroy_cart_product_path(cart_product), data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
-  <br>
+<% if @cart.cart_products.present? %>
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Title</td>
+        <td>Quantity</td>
+        <td>Price</td>
+        <td>Subtotal</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.cart_products.each do |cart_product| %>
+        <tr>
+          <td><%= cart_product.product.title %></td>
+          <td>£<%= cart_product.product.price %></td>
+          <td><%= cart_product.quantity %></td>
+          <td>£<%= cart_product.product.price * cart_product.quantity %></td>
+        <!-- Form for updating quantity -->
+        <%= form_with model: cart_product, url: cartproduct_path(cart_product), method: :patch do |f| %>
+          <%= f.number_field :quantity, value: cart_product.quantity %>
+          <%= f.submit 'Update', class: "btn btn-primary btn-sm" %>
+        <% end %>
+        <%= link_to 'Remove All', destroy_cart_product_path(cart_product), data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
+        <br>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Your cart is empty</p>
 <% end %>
 
 <h3>
