@@ -1,10 +1,13 @@
 class OrdersController < ApplicationController
+  def index
+    @orders = current_user.orders
+  end
+
   def show
     @order = current_user.orders.find(params[:id])
   end
 
   def create
-    # debugger
     @cart = current_user.cart
     if @cart.cart_products.empty?
       redirect_to cart_path(@cart), alert: 'Your cart is empty'
@@ -20,9 +23,9 @@ class OrdersController < ApplicationController
     end
 
     if @order.save
-      @order.status = 'completed'
+      @order.update(status: 'Completed')
       @cart.cart_products.destroy_all
-      redirect_to order_path, notice: 'Order was successfully created.'
+      redirect_to order_path(@order), notice: 'Order was successfully created.'
     else
       redirect_to cart_path(@cart), alert: 'There was an error creating your order.'
     end
