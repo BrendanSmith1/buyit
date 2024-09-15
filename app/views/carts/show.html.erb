@@ -12,3 +12,12 @@
   <%= link_to 'Remove All', destroy_cart_product_path(cart_product), data: { "turbo-method": :delete, turbo_confirm: 'Are you sure?' } %>
   <br>
 <% end %>
+
+<h3>
+  Total: £
+  <% @cart.cart_products.each do |cart_product| %>
+    <%= cart_product.product.price * cart_product.quantity %>
+  <% end %>
+</h3>
+
+<%= button_to 'Checkout', orders_path, method: :post, class: "btn btn-success", data: {confirm: "Are you sure you want to proceed to checkout?"} %>
