@@ -41,10 +41,14 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+# Use SCSS for stylesheets
+gem "bootstrap", "~> 5.2"
 gem "sassc-rails"
 gem "font-awesome-sass", "~> 6.1"
 gem "simple_form"
 gem "autoprefixer-rails"
+gem 'faker'
+gem "devise"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -64,6 +68,4 @@ group :development do
   gem "error_highlight", ">= 0.4.0", platforms: [:ruby]
 
 
-  gem 'faker'
-  gem "devise"
 end
