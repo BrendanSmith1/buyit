@@ -2,8 +2,11 @@
 
 <% @products.each do |product| %>
   <div class="card">
-    <h2> <%= link_to product.title, product_path(product) %> </h2>
-    <p>£<%= product.price %></p>
+    <%= image_tag product.image_url%>
+    <div class="header">
+      <h2> <%= link_to product.title, product_path(product) %> </h2>
+      <p>£<%= product.price %></p>
+    </div>
   </div>
 <% end %>
 
