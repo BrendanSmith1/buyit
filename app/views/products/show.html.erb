@@ -1,11 +1,26 @@
-<h1>Welcome to <%= @product.title %> Page</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-3">
+      <%= image_tag @product.image_url %>
+    </div>
+    <div class="col-md-auto">
+      <%# Title should be on the right %>
+      <h1><%= @product.title %></h1>
 
-<p>Price:  £<%= @product.price %></p>
-<p>Quantity in stock: <%= @product.stock_quantity %> </p>
+      <p>Price:  £<%= @product.price %></p>
+      <%# Description should be below title on the right %>
+      <p>Description: <%= @product.description %></p>
+    </div>
+  </div>
 
-<%= form_with url: cartproducts_path, method: :post do |f| %>
-  <%= hidden_field_tag :product_id, @product.id %>
-  <%= f.submit 'Add to Cart', class: "btn btn-primary" %>
-<% end %>
 
-<%= link_to 'View Cart', cart_path(current_user.cart), class: "btn btn-secondary" %>
+  <p>Quantity in stock: <%= @product.stock_quantity %> </p>
+
+  <%= form_with url: cartproducts_path, method: :post do |f| %>
+    <%= hidden_field_tag :product_id, @product.id %>
+    <%= f.submit 'Add to Cart', class: "btn btn-primary" %>
+  <% end %>
+  <br>
+
+  <%= link_to 'View Cart', cart_path(current_user.cart), class: "btn btn-secondary" %>
+</div>

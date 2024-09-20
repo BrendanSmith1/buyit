@@ -1,13 +1,17 @@
-<h1>Welcome to the All Products page</h1>
+<div class="container">
+  <h1>Welcome to the All Products page</h1>
 
-<% @products.each do |product| %>
-  <div class="card">
-    <%= image_tag product.image_url%>
-    <div class="header">
-      <h2> <%= link_to product.title, product_path(product) %> </h2>
-      <p>£<%= product.price %></p>
-    </div>
+  <div class="row row-cols-4">
+    <% @products.each do |product| %>
+      <div class="col card ">
+        <%= image_tag product.image_url%>
+        <div class="card-body">
+          <h2> <%= link_to product.title, product_path(product) %> </h2>
+          <p>£<%= product.price %></p>
+        </div>
+      </div>
+    <% end %>
   </div>
-<% end %>
 
-<%# <%= link_to "New Product", new_product_path %> %>
+  <%# <%= link_to "New Product", new_product_path %> %>
+</div>
